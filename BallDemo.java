@@ -1,4 +1,7 @@
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Class BallDemo - a short demonstration showing animation with the 
@@ -23,7 +26,7 @@ public class BallDemo
     /**
      * Simulate two bouncing balls
      */
-    public void bounce()
+    public void bounce(int numBolas)
     {
         int ground = 400;   // position of the ground line
 
@@ -32,22 +35,37 @@ public class BallDemo
         // draw the ground
         myCanvas.drawLine(50, ground, 550, ground);
 
-        // crate and show the balls
-        BouncingBall ball = new BouncingBall(50, 50, 16, Color.BLUE, ground, myCanvas);
-        ball.draw();
-        BouncingBall ball2 = new BouncingBall(70, 80, 20, Color.RED, ground, myCanvas);
-        ball2.draw();
+        ArrayList<BouncingBall> bolas = new ArrayList<>();
 
+        // crate and show the balls
+
+        for (int i=0; i<numBolas; i++){
+            Random aleatorio = new Random();
+            int radio = aleatorio.nextInt(100);
+            int red = aleatorio.nextInt(256);
+            int green = aleatorio.nextInt(256);
+            int blue = aleatorio.nextInt(256);
+            int x = aleatorio.nextInt(240);
+            int y = aleatorio.nextInt(400);
+            BouncingBall ball = new BouncingBall(x,y , radio, new Color(blue, red , green), ground, myCanvas);
+     
+            bolas.add(ball);
+            ball.draw();
+        }
         // make them bounce
         boolean finished =  false;
         while(!finished) {
             myCanvas.wait(50);           // small delay
-            ball.move();
-            ball2.move();
-            // stop once ball has travelled a certain distance on x axis
-            if(ball.getXPosition() >= 550 || ball2.getXPosition() >= 550) {
-                finished = true;
+            for(BouncingBall bola : bolas)
+            {
+                bola.move();
+                // stop once ball has travelled a certain distance on x axis
+                if(bola.getXPosition() >= 550) {
+
+                    finished = true;
+                }
             }
         }
+
     }
 }
